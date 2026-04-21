@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PinPrice — Find where to buy your Pinterest pins</title>
+  <meta name="description" content="PinPrice connects to your Pinterest boards and automatically finds where to buy the fashion items you pin. Your visual wishlist, finally shoppable.">
+  <meta property="og:title" content="PinPrice — Your Pinterest wishlist, finally shoppable.">
+  <meta property="og:description" content="Pin anything on Pinterest. We find where to buy it.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FAF8F2;
+      --text: #1A1F14;
+      --accent: #4A6B2E;
+      --accent-dark: #334A1E;
+      --accent-soft: #D8E0C5;
+      --surface: #F2EEE3;
+      --muted: #8A8A80;
+      --border: #E6E1D3;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .serif { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; letter-spacing: -0.02em; }
+
+    /* Nav */
+    nav {
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 26px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .logo-dot { color: var(--accent); }
+    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      padding: 96px 0 80px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+    h1.hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: clamp(48px, 8vw, 88px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+    h1.hero-title .highlight { color: var(--accent); font-style: italic; }
+    .hero p.lead {
+      font-size: 19px;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.55;
+    }
+    .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--surface); }
+
+    /* Features */
+    .features {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(36px, 5vw, 52px);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 60px;
+      font-size: 17px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--surface);
+      padding: 32px 28px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--accent);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+    .feature-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 24px;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+    .feature-card p { color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+    /* How it works */
+    .how { padding: 80px 0; border-top: 1px solid var(--border); }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; margin-top: 40px; }
+    .step { text-align: left; }
+    .step-num {
+      display: inline-block;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 48px;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .step h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    .step p { color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+    /* CTA */
+    .cta-section {
+      padding: 96px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .cta-box {
+      background: var(--accent);
+      color: white;
+      padding: 64px 40px;
+      border-radius: 24px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .cta-box h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: clamp(32px, 4vw, 46px);
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .cta-box p { opacity: 0.85; margin-bottom: 28px; font-size: 17px; }
+    .btn-white { background: white; color: var(--accent-dark); }
+    .btn-white:hover { background: var(--bg); }
+
+    /* Footer */
+    footer {
+      padding: 48px 0 32px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: center;
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 14px; }
+    .footer-links a:hover { color: var(--accent); }
+    .copyright { color: var(--muted); font-size: 14px; }
+
+    @media (max-width: 640px) {
+      .hero { padding: 64px 0 48px; }
+      .features, .how, .cta-section { padding: 56px 0; }
+      .cta-box { padding: 48px 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="/" class="logo">PinPrice<span class="logo-dot">.</span></a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="badge">✨ Coming soon on iOS</div>
+      <h1 class="hero-title">Your Pinterest wishlist,<br><span class="highlight">finally shoppable.</span></h1>
+      <p class="lead">Pin anything on Pinterest. PinPrice quietly finds where to buy it — so your inspiration board becomes a real shopping list.</p>
+      <div class="cta-row">
+        <a href="#how" class="btn btn-primary">See how it works →</a>
+        <a href="/privacy.html" class="btn btn-secondary">Privacy policy</a>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <h2 class="section-title serif">Built for the way you actually shop.</h2>
+      <p class="section-sub">Fashion inspiration lives on Pinterest. Shopping shouldn't live anywhere else.</p>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📌</div>
+          <h3>Watches your boards</h3>
+          <p>Connect one Pinterest board and PinPrice handles the rest — every new pin gets processed automatically.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔎</div>
+          <h3>Finds purchase links</h3>
+          <p>Using visual matching and product search, we identify the item in your pin and find trusted stores that sell it.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛍️</div>
+          <h3>One wishlist, everywhere</h3>
+          <p>Organize pins into collections, save favorites, and open any item straight in the retailer's site.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="how" id="how">
+      <h2 class="section-title serif">How it works.</h2>
+      <p class="section-sub">Three steps. That's it.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h4>Connect Pinterest</h4>
+          <p>Sign in with your Pinterest account and pick one board for PinPrice to watch.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h4>Pin as usual</h4>
+          <p>Keep using Pinterest the way you always do. We'll quietly process every new pin.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h4>Open PinPrice</h4>
+          <p>See where to buy each item, sorted into collections — ready whenever you are.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="cta-box">
+        <h2>Join the waitlist.</h2>
+        <p>PinPrice is launching on iOS soon. Be first to know.</p>
+        <a href="mailto:hello@pinprice.app?subject=Waitlist" class="btn btn-white">hello@pinprice.app</a>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-row">
+        <div class="copyright">© 2026 PinPrice. Made for pinners.</div>
+        <div class="footer-links">
+          <a href="/privacy.html">Privacy</a>
+          <a href="/terms.html">Terms</a>
+          <a href="mailto:hello@pinprice.app">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
